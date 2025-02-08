@@ -1,1 +1,1 @@
-web: py-m manage runserver
+web: python -m manage runserver
