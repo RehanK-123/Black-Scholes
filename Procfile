@@ -1,1 +1,1 @@
-web: sh -c 'cd ls && exec python -m manage runserver'
+web: sh -c 'ls && exec python -m manage runserver'
