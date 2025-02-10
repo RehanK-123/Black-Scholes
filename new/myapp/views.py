@@ -18,4 +18,4 @@ def home(request):
     else:
         form = NameForm()        
 
-    return render(request,"home.html",{'form':form}) #renders the home page 
+    return render(request,"Home.html",{'form':form}) #renders the home page 
