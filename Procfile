@@ -1,1 +1,1 @@
-web: sh -c 'cd ./new && exec python -m manage runserver'
+web: gunicorn new.wsgi:application --bind 0.0.0.0:8000
