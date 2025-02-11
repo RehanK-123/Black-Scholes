@@ -1,6 +1,8 @@
 import datetime as dt
 import requests
 import numpy as np
+import os  
+import base64
 from bson import ObjectId
 from pymongo import MongoClient
 from scipy.stats import norm
@@ -10,6 +12,17 @@ class FinancialDataProcessor:
     def __init__(self, cleaned_data):
         # Initialize with cleaned form data
         self.dic = cleaned_data
+
+    def mongoconnection(self):
+        pem_base64 = os.getenv("MongoConnection")
+
+        if pem_base64:
+            pem_path = "/tmp/X509-cert.pem"
+            with open(pem_path, "wb") as pem_file:
+                pem_file.write(base64.b64decode(pem_base64))
+            return pem_path
+        else:
+            raise ValueError("MongoConnection environment variable is missing!")
 
     def options_data(self):
         key = "YPBRFBE73PWU9YKC"
@@ -21,7 +34,9 @@ class FinancialDataProcessor:
         data = response.json()
 
         try:
-            conn = MongoClient("mongodb+srv://cluster0.qkxvm.mongodb.net/?authSource=%24external&authMechanism=MONGODB-X509&retryWrites=true&w=majority&appName=Cluster0&tls=true&tlsCAFile=C%3A%5CUsers%5CRehan+Khan%5CDownloads%5CX509-cert-4423045577537522277.pem&tlsCertificateKeyFile=C%3A%5CUsers%5CRehan+Khan%5CDownloads%5CX509-cert-4423045577537522277.pem&tlsAllowInvalidHostnames=true&tlsAllowInvalidCertificates=true")
+            pem_path = self.mongoconnection()
+            # conn = MongoClient("mongodb+srv://cluster0.qkxvm.mongodb.net/?authSource=%24external&authMechanism=MONGODB-X509&retryWrites=true&w=majority&appName=Cluster0&tls=true&tlsCAFile=C%3A%5CUsers%5CRehan+Khan%5CDownloads%5CX509-cert-4423045577537522277.pem&tlsCertificateKeyFile=C%3A%5CUsers%5CRehan+Khan%5CDownloads%5CX509-cert-4423045577537522277.pem&tlsAllowInvalidHostnames=true&tlsAllowInvalidCertificates=true")
+            conn = MongoClient("mongodb+srv://cluster0.qkxvm.mongodb.net/?authSource=%24external&authMechanism=MONGODB-X509", tls=True, tlsCertificateKeyFile=pem_path)
             print("Connection Successful")
         except:
             print("Connection Failed")
@@ -44,7 +59,9 @@ class FinancialDataProcessor:
         data = requests.get(url)
 
         try:
-            conn = MongoClient("mongodb+srv://cluster0.qkxvm.mongodb.net/?authSource=%24external&authMechanism=MONGODB-X509&retryWrites=true&w=majority&appName=Cluster0&tls=true&tlsCAFile=C%3A%5CUsers%5CRehan+Khan%5CDownloads%5CX509-cert-4423045577537522277.pem&tlsCertificateKeyFile=C%3A%5CUsers%5CRehan+Khan%5CDownloads%5CX509-cert-4423045577537522277.pem&tlsAllowInvalidHostnames=true&tlsAllowInvalidCertificates=true")
+            pem_path = self.mongoconnection()
+            # conn = MongoClient("mongodb+srv://cluster0.qkxvm.mongodb.net/?authSource=%24external&authMechanism=MONGODB-X509&retryWrites=true&w=majority&appName=Cluster0&tls=true&tlsCAFile=C%3A%5CUsers%5CRehan+Khan%5CDownloads%5CX509-cert-4423045577537522277.pem&tlsCertificateKeyFile=C%3A%5CUsers%5CRehan+Khan%5CDownloads%5CX509-cert-4423045577537522277.pem&tlsAllowInvalidHostnames=true&tlsAllowInvalidCertificates=true")
+            conn = MongoClient("mongodb+srv://cluster0.qkxvm.mongodb.net/?authSource=%24external&authMechanism=MONGODB-X509", tls=True, tlsCertificateKeyFile=pem_path)
             print("Connection Successful")
         except:
             print("Connection Failed")
@@ -65,7 +82,9 @@ class FinancialDataProcessor:
         data = requests.get(url, headers=headers)
 
         try:
-            conn = MongoClient("mongodb+srv://cluster0.qkxvm.mongodb.net/?authSource=%24external&authMechanism=MONGODB-X509&retryWrites=true&w=majority&appName=Cluster0&tls=true&tlsCAFile=C%3A%5CUsers%5CRehan+Khan%5CDownloads%5CX509-cert-4423045577537522277.pem&tlsCertificateKeyFile=C%3A%5CUsers%5CRehan+Khan%5CDownloads%5CX509-cert-4423045577537522277.pem&tlsAllowInvalidHostnames=true&tlsAllowInvalidCertificates=true")
+            pem_path = self.mongoconnection()
+            # conn = MongoClient("mongodb+srv://cluster0.qkxvm.mongodb.net/?authSource=%24external&authMechanism=MONGODB-X509&retryWrites=true&w=majority&appName=Cluster0&tls=true&tlsCAFile=C%3A%5CUsers%5CRehan+Khan%5CDownloads%5CX509-cert-4423045577537522277.pem&tlsCertificateKeyFile=C%3A%5CUsers%5CRehan+Khan%5CDownloads%5CX509-cert-4423045577537522277.pem&tlsAllowInvalidHostnames=true&tlsAllowInvalidCertificates=true")
+            conn = MongoClient("mongodb+srv://cluster0.qkxvm.mongodb.net/?authSource=%24external&authMechanism=MONGODB-X509", tls=True, tlsCertificateKeyFile=pem_path)
             print("Connection Successful")
         except:
             print("Connection Failed")
