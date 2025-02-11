@@ -102,9 +102,9 @@ class FinancialDataProcessor:
         S = stk_pr[0]["close"]
         K = float(opt_dta[0]["strike"])
         sig = float(opt_dta[0]["implied_volatility"])
-        r = float([i for i in rsfi if i["date"] == date][0]["value"])
+        r = float([i for i in rsfi if i["date"] == date][0]["value"]) / 100 
         T = dt.datetime.strptime(opt_dta[0]["expiration"], '%Y-%m-%d') - dt.datetime.strptime(opt_dta[0]["date"], "%Y-%m-%d")
-        T = T.days
+        T = T.days / 365
         N = norm.cdf
         d1 = (np.log(S/K) + (r + sig ** 2 / 2) * T) / (sig * np.sqrt(T))
         d2 = d1 - sig * np.sqrt(T)
@@ -112,12 +112,13 @@ class FinancialDataProcessor:
         return S * N(d1) - N(d2) * K * np.exp(-r * T)
 
     def bs_put(self, opt_dta, rsfi, stk_pr):
+        date = self.dic["date"]
         S = stk_pr[0]["close"]
         K = float(opt_dta[0]["strike"])
         sig = float(opt_dta[0]["implied_volatility"])
-        r = float([i for i in rsfi if i["date"] == "2024-09-10"][0]["value"])
+        r = float([i for i in rsfi if i["date"] == date][0]["value"]) / 100 
         T = dt.datetime.strptime(opt_dta[0]["expiration"], '%Y-%m-%d') - dt.datetime.strptime(opt_dta[0]["date"], "%Y-%m-%d")
-        T = T.days
+        T = T.days / 365 # in terms of years
         N = norm.cdf
         d1 = (np.log(S/K) + (r + sig ** 2 / 2) * T) / (sig * np.sqrt(T))
         d2 = d1 - sig * np.sqrt(T)
